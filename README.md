@@ -1,31 +1,35 @@
-# Understanding MCP
-## Repository for Understanding MCP (Model Context Protocol) - A hands-on guide 
+# Enterprise AI Accelerator - Day 1
 
-These instructions will guide you through configuring a GitHub Codespaces environment that you can use to run the code. 
+## AI Concepts and Readiness ##
 
-<br><br>
-
-**1. Set a longer timeout for the environment we'll be using - GitHub Codespaces.**
-
-When logged into GitHub, go to [https://github.com/settings/codespaces](https://github.com/settings/codespaces).
-
-Scroll down and find the *Default idle timeout* section and set it to at least 60 minutes.
-
-![Extending timeout](./images/mcp99.png?raw=true "Extending timeout")
+These instructions will guide you through configuring a GitHub Codespaces environment that you can use to do the labs. 
 
 <br><br>
+
+**1. Change your codespace's default timeout from 30 minutes to longer (60 suggested).**
+To do this, when logged in to GitHub, go to https://github.com/settings/codespaces and scroll down on that page until you see the *Default idle timeout* section. Adjust the value as desired.
+
+![Changing codespace idle timeout value](./images/aia-0-1.png?raw=true "Changing codespace idle timeout value")
 
 **2. Click on the button below to start a new codespace from this repository.**
 
-Click here ➡️  [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/skillrepos/mcp?quickstart=1)
+Click here ➡️  [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/skillrepos/aia-day2-b?quickstart=1)
 
 <br><br>
 
 **3. Then click on the option to create a new codespace.**
 
-![Creating new codespace from button](./images/mcp1.png?raw=true "Creating new codespace from button")
+![Creating new codespace from button](./images/aia-0-2.png?raw=true "Creating new codespace from button")
 
-This will run for a few minutes while it gets the virtual environment ready. You'll then need to run a setup script to finalize the installation.
+This will run for a long time while it gets everything ready.
+
+After the initial startup, it will run a script to setup the python environment and install needed python pieces. This will take several more minutes to run. It will look like this while this is running.
+
+![Final prep](./images/aia-0-5.png?raw=true "Final prep")
+
+The codespace is ready to use when you see a prompt like the one shown below in its terminal.
+
+![Ready to use](./images/aia-0-3.png?raw=true "Ready to use")
 
 <br><br>
 
@@ -56,5 +60,27 @@ When the script is completed (after a long run), you can just click on the "+" s
 You can open the [labs.md](./labs.md) file either in your codespace or in a separate browswer tab/instance.**
 
 ![Labs](./images/mcp78.png?raw=true "Labs")
+
+<br>
+
+**Now, you are ready for the labs!**
+
+<br><br>
+
+
+
+---
+
+## License and Use
+
+These materials are provided as part of the **Enterprise AI Accelerator Workshop** conducted by **TechUpSkills (Brent Laster)**.
+
+Use of this repository is permitted **only for registered workshop participants** for their own personal learning and
+practice. Redistribution, republication, or reuse of any part of these materials for teaching, commercial, or derivative
+purposes is not allowed without written permission.
+
+© 2025 TechUpSkills / Brent Laster. All rights reserved.
+
+
 
 
