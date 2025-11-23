@@ -1,6 +1,6 @@
-# Enterprise AI Accelerator - Day 1
+# Enterprise AI Accelerator - Day 2 - Part 2
 
-## AI Concepts and Readiness ##
+## Model Context Protocol (MCP) ##
 
 These instructions will guide you through configuring a GitHub Codespaces environment that you can use to do the labs. 
 
