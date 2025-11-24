@@ -78,12 +78,18 @@ def _get_chroma_collection() -> chromadb.Collection:
 
 def _index_knowledge_base():
     """Index OmniTech PDFs into ChromaDB if not already indexed."""
-    collection = _get_chroma_collection()
+    global _chroma_client, _knowledge_collection
 
-    # Check if already indexed
-    if collection.count() > 0:
-        print(f"✅ Knowledge base already indexed ({collection.count()} chunks)")
-        return
+    # Check if ChromaDB already exists with data
+    if CHROMA_PATH.exists():
+        # Temporarily connect to check if already indexed
+        collection = _get_chroma_collection()
+        if collection.count() > 0:
+            print(f"✅ Knowledge base already indexed ({collection.count()} chunks)")
+            return
+        # Reset caches since indexing will recreate the database
+        _chroma_client = None
+        _knowledge_collection = None
 
     # Run the indexing tool
     print("📚 Indexing OmniTech knowledge base PDFs...")
@@ -100,18 +106,39 @@ def _index_knowledge_base():
             sys.executable,
             str(INDEX_TOOL_PATH),
             "--pdf-dir", str(KNOWLEDGE_BASE_DIR),
-            "--chroma-path", str(CHROMA_PATH)
+            "--chroma-path", str(CHROMA_PATH),
+            "--collection", "omnitech_knowledge"
         ]
 
         result = subprocess.run(cmd, capture_output=True, text=True)
 
+        # Always show output for debugging
+        if result.stdout:
+            print("📝 Indexing output:")
+            for line in result.stdout.strip().split('\n'):
+                print(f"   {line}")
+        if result.stderr:
+            # Check if it's actually errors or just info logs
+            stderr_lines = result.stderr.strip().split('\n')
+            has_error = any('ERROR' in line or 'Exception' in line for line in stderr_lines)
+
+            if has_error:
+                print("⚠️ Indexing errors:")
+            else:
+                print("📋 Indexing logs:")
+
+            for line in stderr_lines:
+                print(f"   {line}")
+
         if result.returncode == 0:
-            print("✅ Successfully indexed knowledge base")
-            # Refresh collection count
+            print("✅ Indexing subprocess returned success")
+            # Refresh both client and collection to see subprocess changes
+            _chroma_client = None
             _knowledge_collection = None
             collection = _get_chroma_collection()
+            print(f"📊 After indexing, collection has {collection.count()} documents")
         else:
-            print(f"❌ Indexing failed: {result.stderr}")
+            print(f"❌ Indexing failed (exit code {result.returncode})")
     except Exception as e:
         print(f"❌ Error running index tool: {e}")
 
@@ -391,25 +418,8 @@ def get_query_template(query_name: str) -> dict:
 
 # ─── Knowledge Retrieval Tools (RAG) ─────────────────────────────
 
-@mcp.tool
-def vector_search_knowledge(query: str, top_k: int = 5, category: str = None) -> dict:
-    """
-    Semantic search through OmniTech knowledge base using ChromaDB.
-
-    Parameters
-    ----------
-    query : str
-        Natural language search query
-    top_k : int
-        Number of results to return (default: 5)
-    category : str, optional
-        Limit search to specific category (account_security, device_troubleshooting, etc.)
-
-    Returns
-    -------
-    dict
-        {"matches": list of documents with metadata, "count": int}
-    """
+def _vector_search_knowledge_internal(query: str, top_k: int = 5, category: str = None) -> dict:
+    """Internal function for vector search."""
     try:
         embed_model = _get_embed_model()
         collection = _get_chroma_collection()
@@ -428,7 +438,7 @@ def vector_search_knowledge(query: str, top_k: int = 5, category: str = None) ->
         where_clause = None
         if category and category in DOCUMENT_CATEGORIES:
             pdf_names = DOCUMENT_CATEGORIES[category]
-            where_clause = {"source": {"$in": [f"knowledge_base_pdfs/{pdf}" for pdf in pdf_names]}}
+            where_clause = {"source": {"$in": pdf_names}}
 
         # Search
         results = collection.query(
@@ -461,6 +471,27 @@ def vector_search_knowledge(query: str, top_k: int = 5, category: str = None) ->
         return {"error": str(e)}
 
 @mcp.tool
+def vector_search_knowledge(query: str, top_k: int = 5, category: str = None) -> dict:
+    """
+    Semantic search through OmniTech knowledge base using ChromaDB.
+
+    Parameters
+    ----------
+    query : str
+        Natural language search query
+    top_k : int
+        Number of results to return (default: 5)
+    category : str, optional
+        Limit search to specific category (account_security, device_troubleshooting, etc.)
+
+    Returns
+    -------
+    dict
+        {"matches": list of documents with metadata, "count": int}
+    """
+    return _vector_search_knowledge_internal(query, top_k, category)
+
+@mcp.tool
 def get_knowledge_for_query(category: str, query: str, top_k: int = 3) -> dict:
     """
     Get relevant knowledge for a specific support category and query.
@@ -483,7 +514,7 @@ def get_knowledge_for_query(category: str, query: str, top_k: int = 3) -> dict:
     """
     try:
         # Use vector search with category filter
-        search_result = vector_search_knowledge(query, top_k=top_k, category=category)
+        search_result = _vector_search_knowledge_internal(query, top_k=top_k, category=category)
 
         if "error" in search_result:
             return search_result
@@ -553,16 +584,8 @@ def validate_support_query(query: str) -> dict:
 
 # ─── Statistics Tools ─────────────────────────────────────────────
 
-@mcp.tool
-def get_knowledge_base_stats() -> dict:
-    """
-    Get statistics about the indexed knowledge base.
-
-    Returns
-    -------
-    dict
-        {"total_chunks": int, "documents": dict, "status": str}
-    """
+def _get_knowledge_base_stats_internal() -> dict:
+    """Internal function to get knowledge base statistics."""
     try:
         collection = _get_chroma_collection()
 
@@ -590,6 +613,18 @@ def get_knowledge_base_stats() -> dict:
         }
     except Exception as e:
         return {"error": str(e)}
+
+@mcp.tool
+def get_knowledge_base_stats() -> dict:
+    """
+    Get statistics about the indexed knowledge base.
+
+    Returns
+    -------
+    dict
+        {"total_chunks": int, "documents": dict, "status": str}
+    """
+    return _get_knowledge_base_stats_internal()
 
 # ╔══════════════════════════════════════════════════════════════════╗
 # 4. Server Startup                                                  ║
@@ -624,7 +659,7 @@ if __name__ == "__main__":
         print(f"  • {name}: {config['description']}")
 
     print("\nKnowledge Base Documents:")
-    stats = get_knowledge_base_stats()
+    stats = _get_knowledge_base_stats_internal()
     if "documents" in stats:
         for doc, count in stats["documents"].items():
             print(f"  • {doc}: {count} chunks")
