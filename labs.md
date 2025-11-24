@@ -1,7 +1,7 @@
 # Enterprise AI Accelerator Workshop
 ## Day 2 - Part 2 - MCP
 ## Session labs 
-## Revision 1.0 - 11/24/25
+## Revision 1.1 - 11/24/25
 
 **Versions of dialogs, buttons, etc. shown in screenshots may differ from current version used in dev environments**
 
@@ -477,7 +477,7 @@ python tools/discover_tools.py
    This represents best practices for production customer support systems with clear separation of concerns.
 
 ```
-code -d extra/rag_agent_solution.txt rag_agent_classification.py
+code -d extra/rag_agent_classification_solution.txt rag_agent_classification.py
 ```
 
 ![Updating the RAG agent](./images/aiapps10.png?raw=true "Updating the RAG agent") 
