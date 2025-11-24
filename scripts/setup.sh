@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# Manual setup script for environments where devcontainer setup fails
 # This script sets up the Python environment and Ollama as intended by the postcreate commands
 
 set -e
@@ -20,7 +21,7 @@ echo "Installing Python dependencies..."
 if [ -f "./requirements.txt" ]; then
   pip3 install -r "./requirements.txt"
 else
-  pip3 install -r "/workspaces/mcp/requirements/requirements.txt"
+  pip3 install -r "/workspaces/ato-agents/requirements/requirements.txt"
 fi
 
 # Set up Ollama
@@ -39,13 +40,26 @@ done
 
 sleep 15
 
-
 echo "Pulling llama3.2 model..."
 ollama pull llama3.2
 ollama list
 
+# Warmup the model for faster first responses
+echo "Warming up llama3.2 model..."
+if [ -f "$(dirname "$0")/scripts/warmup.sh" ]; then
+    bash "$(dirname "$0")/scripts/warmup.sh" || echo "Model warmup failed, but continuing anyway"
+elif [ -f "./scripts/warmup.sh" ]; then
+    bash "./scripts/warmup.sh" || echo "Model warmup failed, but continuing anyway"
+else
+    echo "Warmup script not found, skipping model warmup"
+fi
 
+# Kill the temporary Ollama process
+pkill -9 "ollama" || true
 
-echo "Setup complete!"
+echo "Starting Ollama service in background..."
+nohup bash -c 'ollama serve &'
+
+echo "Manual setup complete!"
 echo "Python environment: $PYTHON_ENV"
 echo "To activate the environment, run: source ./$PYTHON_ENV/bin/activate"

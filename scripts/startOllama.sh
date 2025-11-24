@@ -8,8 +8,12 @@ done
 
 sleep 15
 ollama pull llama3.2
-# ollama pull qwen2.5:7b
 ollama list
+
+
+# Warmup the model for faster first responses
+echo "Warming up llama3.2 model..."
+bash "$(dirname "$0")/warmup.sh" || echo "Model warmup failed, but continuing anyway"
 
 # kill ollama process here since it runs in a separate shell
 # startup command will restart it
