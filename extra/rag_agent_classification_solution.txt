@@ -44,6 +44,12 @@ MCP_ENDPOINT = "http://127.0.0.1:8000/mcp/"
 TOP_K        = 3
 MODEL        = os.getenv("OLLAMA_MODEL", "llama3.2")
 
+# ANSI color codes for terminal output
+BLUE = "\033[34m"      # Dark blue for LLM responses
+CYAN = "\033[36m"      # Cyan for sources
+GREEN = "\033[32m"     # Green for "Agent:" label
+RESET = "\033[0m"      # Reset to default color
+
 # Support category keywords for quick routing
 SUPPORT_KEYWORDS = {
     "password": ["password", "reset", "forgot", "login", "access"],
@@ -57,6 +63,17 @@ SUPPORT_KEYWORDS = {
 # ╔══════════════════════════════════════════════════════════════════╗
 # 2. Helper Functions                                                ║
 # ╚══════════════════════════════════════════════════════════════════╝
+async def check_server_running() -> bool:
+    """Check if the MCP classification server is running."""
+    try:
+        # Try to actually connect to the MCP server
+        async with Client(MCP_ENDPOINT) as mcp:
+            # Try to list available tools - if this works, server is running
+            await mcp.list_tools()
+            return True
+    except Exception:
+        return False
+
 def unwrap(obj):
     """Unwrap FastMCP result objects."""
     if hasattr(obj, "structured_content") and obj.structured_content:
@@ -66,6 +83,18 @@ def unwrap(obj):
     if isinstance(obj, list) and len(obj) == 1:
         return unwrap(obj[0])
     return obj
+
+def format_response(response: str) -> str:
+    """Format response with colors - blue for content, cyan for sources."""
+    # Split on the sources divider
+    if "\n---\n*Sources:" in response:
+        parts = response.split("\n---\n*Sources:")
+        content = parts[0]
+        sources = "*Sources:" + parts[1]
+        return f"{BLUE}{content}{RESET}\n---\n{CYAN}{sources}{RESET}"
+    else:
+        # No sources, just color the whole response
+        return f"{BLUE}{response}{RESET}"
 
 def is_support_query(query: str) -> bool:
     """Determine if this is a customer support query vs exploratory."""
@@ -152,10 +181,10 @@ async def handle_canonical_query_with_classification(user_query: str) -> str:
             sources = knowledge_info.get("sources", [])
 
             if not knowledge or knowledge == "No relevant documentation found.":
-                print("⚠️ No specific documentation found, using general template")
+                print("[WARNING] No specific documentation found, using general template")
                 knowledge = f"General support information for {description}"
 
-            print(f"📚 Retrieved {len(sources)} source(s)")
+            print(f"[INFO] Retrieved {len(sources)} source(s)")
 
             # Step 4: Execute LLM with template + knowledge
             print("[4/4] Generating response with LLM...")
@@ -187,11 +216,11 @@ async def handle_canonical_query_with_classification(user_query: str) -> str:
                 if sources:
                     result += "\n\n---\n*Sources: " + ", ".join(set(sources)) + "*"
 
-                print(f"✅ Response generated ({len(result)} chars)")
+                print(f"[SUCCESS] Response generated ({len(result)} chars)")
                 return result
 
             except Exception as llm_error:
-                print(f"⚠️ LLM error: {llm_error}")
+                print(f"[WARNING] LLM error: {llm_error}")
                 # Fallback response
                 fallback = f"**Support Category: {suggested_category.replace('_', ' ').title()}**\n\n"
                 fallback += f"{description}\n\n"
@@ -235,7 +264,7 @@ async def handle_rag_search(user_query: str) -> str:
                     "Please try rephrasing your question or contact our support team."
                 )
 
-            print(f"📚 Found {len(matches)} relevant documents")
+            print(f"[INFO] Found {len(matches)} relevant documents")
 
             # Compile knowledge from matches
             knowledge_parts = []
@@ -279,7 +308,7 @@ async def handle_rag_search(user_query: str) -> str:
                 return result
 
             except Exception as llm_error:
-                print(f"⚠️ LLM unavailable: {llm_error}")
+                print(f"[WARNING] LLM unavailable: {llm_error}")
                 # Fallback: Return the raw knowledge
                 fallback = "**Relevant Information Found:**\n\n"
                 for i, part in enumerate(knowledge_parts[:3], 1):
@@ -326,7 +355,8 @@ async def demo_support_queries():
         print(f"\nUser: {query}")
         print("-" * 40)
         result = await process_query(query)
-        print(f"Agent: {result}")
+        formatted_result = format_response(result)
+        print(f"{GREEN}Agent:{RESET}\n{formatted_result}")
         print()
 
 if __name__ == "__main__":
@@ -334,31 +364,41 @@ if __name__ == "__main__":
     print("OmniTech Customer Support RAG Agent")
     print("=" * 70)
     print("\nArchitecture:")
-    print("  🔹 MCP Server = Knowledge Layer")
+    print("  * MCP Server = Knowledge Layer")
     print("     - Owns OmniTech PDF documentation")
     print("     - Manages vector database (ChromaDB)")
     print("     - Provides classification & search tools")
-    print("  🔹 RAG Agent = Orchestration Layer")
+    print("  * RAG Agent = Orchestration Layer")
     print("     - Routes to support or exploratory workflows")
     print("     - Executes LLM with retrieved knowledge")
     print("     - NO local file reading or embeddings")
     print("\nKnowledge Base:")
-    print("  • Account Security Handbook")
-    print("  • Device Troubleshooting Manual")
-    print("  • Global Shipping Logistics")
-    print("  • Returns Policy 2024")
-    print("\nPrerequisites:")
-    print("  ⚠️  MCP classification server MUST be running first!")
-    print("     Run: python mcp_server_classification.py")
+    print("  * Account Security Handbook")
+    print("  * Device Troubleshooting Manual")
+    print("  * Global Shipping Logistics")
+    print("  * Returns Policy 2024")
+
+    # Check if server is running
+    print("\n[INFO] Checking MCP server status...")
+    server_running = asyncio.run(check_server_running())
+
+    if not server_running:
+        print("\n[WARNING] Prerequisites:")
+        print("  * MCP classification server is NOT running!")
+        print("     Run: python mcp_server_classification.py")
+        print("     The agent will not work without the server.")
+    else:
+        print("[SUCCESS] MCP classification server is running and ready.")
+
     print("\nCommands:")
-    print("  • Type 'exit' to quit")
-    print("  • Type 'demo' for sample queries")
+    print("  * Type 'exit' to quit")
+    print("  * Type 'demo' for sample queries")
     print("\nExample Support Queries:")
-    print("  🔐 Security: 'How do I reset my password?'")
-    print("  🔧 Device: 'My device won't turn on'")
-    print("  📦 Shipping: 'Track my order'")
-    print("  ↩️  Returns: 'What is your return policy?'")
-    print("  🔍 General: 'Tell me about OmniTech'")
+    print("  * Security: 'How do I reset my password?'")
+    print("  * Device: 'My device won't turn on'")
+    print("  * Shipping: 'Track my order'")
+    print("  * Returns: 'What is your return policy?'")
+    print("  * General: 'Tell me about OmniTech'")
     print("=" * 70)
     print()
 
@@ -370,4 +410,5 @@ if __name__ == "__main__":
             asyncio.run(demo_support_queries())
         elif user_input:
             result = asyncio.run(process_query(user_input))
-            print(f"\n{result}\n")
+            formatted_result = format_response(result)
+            print(f"\n{GREEN}Agent:{RESET}\n{formatted_result}\n")
