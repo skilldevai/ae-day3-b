@@ -11,9 +11,9 @@ ollama pull llama3.2
 ollama list
 
 
-# Warmup the model for faster first responses
-echo "Warming up llama3.2 model..."
-bash "$(dirname "$0")/warmup.sh" || echo "Model warmup failed, but continuing anyway"
+# Warmup both Ollama models and MCP components for faster first responses
+echo "Warming up Ollama and MCP components..."
+bash "$(dirname "$0")/warmup_all.sh" || echo "Warmup failed, but continuing anyway"
 
 # kill ollama process here since it runs in a separate shell
 # startup command will restart it
