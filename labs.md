@@ -133,7 +133,7 @@ python agent_mcp.py
 12. You can stop the MCP server in the original terminal via CTRL-C.
 
 <p align="center">
-**[END OF LAB]**
+<b>[END OF LAB]</b>
 </p>
 </br></br></br>
 
@@ -216,7 +216,7 @@ python scripts/mcp_explorer.py http://localhost:8000/mcp 5000
 <br><br>
 
 <p align="center">
-**[END OF LAB]**
+<b>[END OF LAB]</b>
 </p>
 </br></br></br>
 
@@ -341,7 +341,7 @@ Then look back at the body of the response from running that, you should see an 
 10. When you're done, you can stop (CTRL+C) the running authorization server and the secure mcp server.
    
 <p align="center">
-**[END OF LAB]**
+<b>[END OF LAB]</b>
 </p>
 </br></br></br>
 
@@ -460,7 +460,7 @@ python tools/discover_tools.py
 8. The server is now ready to handle customer support queries using the OmniTech knowledge base. It can classify support requests, retrieve relevant documentation, and provide structured templates for consistent responses. In the next lab, we'll build an agent that leverages these capabilities, so you can leave it running.
 
 <p align="center">
-**[END OF LAB]**
+<b>[END OF LAB]</b>
 </p>
 </br></br>
 
@@ -587,101 +587,12 @@ Is my device still under warranty?
 
 
 <p align="center">
-**[END OF LAB]**
+<b>[END OF LAB]</b>
 </p>
 </br></br>
 
 
-**Lab 6 - Connecting Applications to MCP Servers**
 
-**Purpose: In this lab, we'll see how to connect GitHub Copilot to the GitHub MCP Server.**
-
-1. For authentication to GitHub, we will need a GitHub personal access token (PAT). When logged into GitHub, click on the link below, provide a note and click the green "Generate token" button at the bottom.
-
-Link:  Generate classic personal access token (repo & workflow scopes) https://github.com/settings/tokens/new?scopes=repo,workflow
-
-![Creating token](./images/mcp10.png?raw=true "Creating token")
-
-![Creating token](./images/mcp87.png?raw=true "Creating token")
-
-<br><br>
-   
-2. On the next screen, make sure to copy the generated token and save it for use later in the lab. You will not be able to see the actual token again!
-
-![Copying token](./images/mcp11.png?raw=true "Copying token")
-<br><br>
-
-3. If the Copilot Chat panel is not already open, then click on the Copilot icon at the top. And/or if it is  not already in Agent mode at the bottom (says "Ask" or "Edit" instead), switch to *Agent* mode  via the drop-down at the bottom. (**NOTE:** If you don't see *Ask* mode or an option to switch to another mode, you may need to complete a setup step as shown in the second screenshot below. Click on the Copilot icon in the bottom status bar and look for a button that says "*Finish setup*" and click on that. Then you should see the options.)
-
-**Opening Chat if not open**
-
-![Opening chat panel](./images/mcp103.png?raw=true "Opening chat panel")
-<br>
-
-**Completing setup - if needed**
-
-![Completing setup](./images/mcp88.png?raw=true "Completing setup")
-<br>
-
-**Switching to Agent mode**
-
-![Switching to Agent mode](./images/mcp12.png?raw=true "Switching to Agent mode")
-
-<br><br>
-
-4. Now we need to add the GitHub MCP Server configuration in our IDE. You could fill most of this out via IDE prompts, but for simplicity, we already have a sample configuration file that we can just copy in. Run the commands below in the terminal. The last one will open the file in the editor.
-
-```
-cd /workspaces/mcp
-mkdir .vscode
-cp extra/mcp_github_settings.json  .vscode/mcp.json
-code .vscode/mcp.json
-```
-
-<br><br>
-
-5. Now, we can start the local MCP server. In the *mcp.json* file, above the name of the server, click on the small *Start* link (see figure below). A dialog will pop up for you to paste in your PAT. Paste the token in there and hit *Enter*. (Note that the token will be masked out.)
-
-![Starting the server](./images/mcp23.png?raw=true "Starting the server")
-
-After this, you should see the text above the server name change to "√Running | Stop | Restart | ## tools | More...".
-
-![Starting the server](./images/mcp24.png?raw=true "Starting the server")
-
-<br><br>
-
-
-6. To see the tools that are available, in the Copilot Chat dialog, click on the small *tool* icon (see figure) and then scroll down to the *MCP Server: GitHub MCP Server* section. You'll see the available tools we picked up under that.
-
-![Viewing available tools](./images/mcp25.png?raw=true "Viewing available tools")
-
-<br><br>
-
-
-7. Now that we have these tools available, we can use them in Copilot's Chat interface. (Again, you must be in *Agent* mode.) Here are some example prompts to try:
-
-```
-Find username for <your name> on GitHub
-Show info on recent changes in <repo path> on GitHub
-```
-</br></br>
-
-8. Notice the mention of "Ran <tool name> - GitHub MCP Server (MCP Server) early in the output for each.
-
-![Example usage](./images/mcp26.png?raw=true "Example usage")
-
-
-9. If you click on the *Extensions* icon on the left (#1 in the screenshot below), you'll see a category for *MCP SERVERS - INSTALLED*. This should show the GitHub MCP Server since we just connected to that.   
-
-![Extensions and browser](./images/mcp97.png?raw=true "Extensions and browser")
-
-10. If you then click on the globe icon (#2 in the screenshot above), you can get to another page that shows a list of available MCP servers to use.
-
-![MCP Servers](./images/mcp98.png?raw=true "MCP Servers")
-
- <p align="center">
-**[END OF LAB]**
-</p>
 </br></br></br>
 
 <br><br>
