@@ -504,7 +504,7 @@ As you review and merge the differences, observe the key architectural patterns:
 
 <br>
 
-![Updating the RAG agent](./images/aiapps10.png?raw=true "Updating the RAG agent") 
+![Updating the RAG agent](./images/aia-2-40.png?raw=true "Updating the RAG agent") 
 
 <br><br>
 
