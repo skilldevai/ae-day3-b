@@ -558,7 +558,7 @@ How long do I have to return a product?
 Is my device still under warranty?
 ```
 
-![Running the RAG agent](./images/aiapps41.png?raw=true "Running the RAG agent") 
+![Running the RAG agent](./images/aia-2-41.png?raw=true "Running the RAG agent") 
 
 <br><br>
 
@@ -583,6 +583,10 @@ Is my device still under warranty?
     - Troubleshooting queries search Device Manual
     - Shipping queries search Logistics documentation
     - Returns queries search Returns Policy
+
+
+![Running the RAG agent](./images/aia-2-42.png?raw=true "Running the RAG agent") 
+
 
 <br><br>
 
