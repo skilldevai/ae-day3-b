@@ -256,7 +256,7 @@ python auth_server.py
 ![Running authentication server](./images/mcp58.png?raw=true "Running authentication server") 
 <br><br>
 
-4. Switch to the other terminal or open a new one. (Over to the far right above the terminals is a "+" to create a new terminal.) Then, let's verify that our authorization server is working with the curl command below and save the token it generates for later use. Run the commands below in the split/new terminal. Afterwards you can echo $TOKEN if you want to see the actual value. (** Make sure to run the last two commands so your token env variable will be accessible in new terminals.**)
+4. Switch to the other terminal or open a new one. (Over to the far right above the terminals is a "+" to create a new terminal.) Then, let's verify that our authorization server is working with the curl command below and save the token it generates for later use. Run the commands below in the split/new terminal. Afterwards you can echo $TOKEN if you want to see the actual value. (**Make sure to run the last two commands so your token env variable will be accessible in new terminals.**)
 
 ```
 export TOKEN=$(
@@ -285,7 +285,7 @@ python secure_server.py
 <br><br>
 
 
-6. Open another new terminal (you can use the "+" again) and run the curl below to demonstrate that requests with no tokens fail. (When you run this you will see a "500 Internal Server Error" response. But if you switch back to the terminal where the server is running, you'll see that it's really a "401" error. It shows as a 500 error because the 401 is "swallowed" before it gets back to the client.
+6. Open another new terminal (you can use the "+" again) and run the curl below to demonstrate that requests with no tokens fail. When you run this you will see a "401 Unauthorized" response with a detailed error message noting "Missing token".
 
 ```
 cd lab3 
@@ -295,11 +295,11 @@ curl -i -X POST http://127.0.0.1:8000/mcp \
      -d '{"jsonrpc":"2.0","id":"bad","method":"list_tools","params":[]}'
 ```
 
-![500 error and switching terminals](./images/mcp56.png?raw=true "500 error and switching terminals") 
+![500 error and switching terminals](./images/aia-2-37.png?raw=true "500 error and switching terminals") 
 <br><br>
 
 
-7. Back in the terminal where you ran that last curl, you can run the secure client. You should see output showing that it ran the "add" tool and the results. Behind the scenes it will have A) POSTed to /token B) Connected to /mcp  with Authorization: Bearer ...  C) Called the secure tool.
+7. In the terminal where you ran that last curl, you can run the secure client. You should see output showing that it ran the "add" tool and the results. Behind the scenes it will have A) POSTed to /token B) Connected to /mcp  with Authorization: Bearer ...  C) Called the secure tool.
 
 ```
 python secure_client.py
