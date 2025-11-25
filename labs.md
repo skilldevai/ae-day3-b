@@ -223,7 +223,7 @@ python scripts/mcp_explorer.py http://localhost:8000/mcp 5000
 
 **Lab 3 - Security and Authorization in MCP**
 
-**Purpose: In this lab, we'll demonstrate how to introduce an external authorization server and work with it to verify the difference between authorized and unauthorized requests when calling MCP tools.
+**Purpose: This lab shows how to add an external authorization server and verify how authorized and unauthorized MCP requests are handled.**
 
 1. Change into the *lab3* directory in the terminal.
    
@@ -480,11 +480,9 @@ python tools/discover_tools.py
 code -d extra/rag_agent_classification_solution.txt rag_agent_classification.py
 ```
 
-![Updating the RAG agent](./images/aiapps10.png?raw=true "Updating the RAG agent") 
+<br>
 
-<br><br>
-
-2. As you review and merge the differences, observe the key architectural patterns:
+As you review and merge the differences, observe the key architectural patterns:
    - **Simplified imports**: No chromadb, pdfplumber, or sentence-transformers needed
    - **MCP-centric knowledge access**: All documentation comes from MCP server
    - **Query routing**: Keywords determine support category vs. exploratory search
@@ -492,9 +490,13 @@ code -d extra/rag_agent_classification_solution.txt rag_agent_classification.py
    - **RAG workflow**: Direct semantic search through knowledge base
    - **Local LLM execution**: Agent only runs the LLM, knowledge comes from server
 
+<br>
+
+![Updating the RAG agent](./images/aiapps10.png?raw=true "Updating the RAG agent") 
+
 <br><br>
 
-3.  Merge each section carefully. Notice two key functions:
+2.  Merge each section carefully. Notice two key functions:
    - `handle_canonical_query_with_classification()`: Orchestrates the 4-step support workflow for classified queries
    - `handle_rag_search()`: Performs direct semantic search for exploratory questions
 
@@ -502,11 +504,11 @@ code -d extra/rag_agent_classification_solution.txt rag_agent_classification.py
 
 <br><br>
 
-4. When finished merging, save the file. Make sure your classification server from Lab 4 is still running (if not, restart it).
+3. When finished merging, save the file. Make sure your classification server from Lab 4 is still running (if not, restart it).
 
 <br><br>
 
-5. Now start the classification agent in a second terminal:
+4. Now start the classification agent in a second terminal:
 
 ```
 python rag_agent_classification.py
@@ -514,7 +516,7 @@ python rag_agent_classification.py
 
 <br><br>
 
-6. The agent will start and explain that it uses the OmniTech knowledge base for customer support. You can try out some of the queries shown below. Note that some may take multiple minutes to process and respond.
+5. The agent will start and explain that it uses the OmniTech knowledge base for customer support. You can try out some of the queries shown below. Note that some may take multiple minutes to process and respond.
 
 **Account Security Questions:**
 ```
@@ -548,7 +550,7 @@ Is my device still under warranty?
 
 <br><br>
 
-7. Observe the workflow differences:
+6. Observe the workflow differences:
 
     **Classified Support Queries** ("How do I reset my password?"):
     - Agent calls MCP's `classify_canonical_query(...)`
@@ -572,7 +574,7 @@ Is my device still under warranty?
 
 <br><br>
 
-8. Notice the architectural benefits:
+7. Notice the architectural benefits:
    - **Classified queries**: Use category-specific search for accurate, focused answers
    - **RAG search**: Semantic search across entire knowledge base for exploratory questions
    - **No duplication**: MCP server owns all knowledge, agent is pure orchestration
