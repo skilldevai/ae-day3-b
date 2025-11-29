@@ -1,7 +1,7 @@
 # Enterprise AI Accelerator Workshop
 ## Day 2 - Part 2 - MCP
 ## Session labs 
-## Revision 1.4 - 11/28/25
+## Revision 1.5 - 11/29/25
 
 **Versions of dialogs, buttons, etc. shown in screenshots may differ from current version used in dev environments**
 
@@ -527,6 +527,12 @@ As you review and merge the differences, observe the key architectural patterns:
 
 3. When finished merging, save the file. Make sure your classification server from Lab 4 is still running (if not, restart it).
 
+```
+(if needed) python mcp_server_classification.py
+```
+
+Reminder: This can take a while to start...
+
 <br><br>
 
 4. Now start the classification agent in a second terminal:
@@ -617,10 +623,6 @@ Is my device still under warranty?
 <b>[END OF LAB]</b>
 </p>
 </br></br>
-
-
-
-</br></br></br>
 
 <br><br>
 **THE END**
