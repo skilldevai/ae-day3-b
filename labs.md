@@ -187,7 +187,7 @@ python scripts/mcp_explorer.py http://localhost:8000/mcp 5000
 <br><br>
 
 
-4. You should automatically be connected to the server. The *Prompts* item will be selected by default. (If the prompt is not shown, you can click on *List Prompts*.)
+4. You should automatically be connected to the server. The *Prompts* item will be selected by default. (If the prompt is not shown, you can click on *Prompts*.)
 
 ![Resources](./images/mcp110.png?raw=true "Resources") 
 <br><br>
@@ -470,6 +470,15 @@ python tools/discover_tools.py 8000 mcp
 <br><br>
 
 8. The server is now ready to handle customer support queries using the OmniTech knowledge base. It can classify support requests, retrieve relevant documentation, and provide structured templates for consistent responses. In the next lab, we'll build an agent that leverages these capabilities, so you can leave it running.
+
+9. (**OPTIONAL**) If you have extra time and want to explore the server more, you can start up our MCP Explorer tool and play with running some of the tools in the server. If you run the command below (from the root of the project), and it tries to open up another codespace instance, just close that and then run the command again.
+
+```
+ $ python ./scripts/mcp_explorer.py http://localhost:8000/mcp 5000
+```
+
+![Discover tools](./images/aia-2-46.png?raw=true "Discover tools") 
+
 
 <p align="center">
 <b>[END OF LAB]</b>
