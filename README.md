@@ -1,4 +1,4 @@
-# Enterprise AI Accelerator - Day 2 - Part 2
+# Applied AI Engineering for the Enterprise - Day 3 - Part 2
 
 ## Model Context Protocol (MCP) ##
 
@@ -8,7 +8,7 @@ These instructions will guide you through configuring a GitHub Codespaces enviro
 
 **1. Click on the button below to start a new codespace from this repository.**
 
-Click here ➡️  [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/skillrepos/aia-day2-b?quickstart=1)
+Click here ➡️  [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/skillrepos/ae-day3-b?quickstart=1)
 
 <br><br>
 
@@ -52,7 +52,7 @@ Use of this repository is permitted **only for registered workshop participants*
 practice. Redistribution, republication, or reuse of any part of these materials for teaching, commercial, or derivative
 purposes is not allowed without written permission.
 
-© 2025 TechUpSkills / Brent Laster. All rights reserved.
+© 2026 TechUpSkills / Brent Laster. All rights reserved.
 
 
 
