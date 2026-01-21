@@ -265,7 +265,7 @@ cd ../lab3
 python auth_server.py
 ```
 
-![Running authentication server](./images/mcp58.png?raw=true "Running authentication server") 
+![Running authentication server](./images/ae67.png?raw=true "Running authentication server") 
 <br><br>
 
 4. Switch to the other terminal or open a new one. (Over to the far right above the terminals is a "+" to create a new terminal.) Then, let's verify that our authorization server is working with the curl command below and save the token it generates for later use. Run the commands below in the split/new terminal. Afterwards you can echo $TOKEN if you want to see the actual value. (**Make sure to run the last two commands so your token env variable will be accessible in new terminals.**)
@@ -282,7 +282,7 @@ echo "export TOKEN=$TOKEN" >> ~/.bashrc
 source ~/.bashrc 
 ```
 </br></br>
-![curl and add new terminal](./images/mcp95.png?raw=true "curl and add new terminal") 
+![curl and add new terminal](./images/ae68.png?raw=true "curl and add new terminal") 
 
 (Optional) If you want to look deeper at the token, you can echo the token string and paste it in at https://jwt.io 
 <br><br>
@@ -296,6 +296,9 @@ python secure_server.py
 ```
 <br><br>
 
+![start secure mcp server](./images/ae69.png?raw=true "start secure mcp server") 
+
+<br><br>
 
 6. Open another new terminal (you can use the "+" again) and run the curl below to demonstrate that requests with no tokens fail. When you run this you will see a "401 Unauthorized" response with a detailed error message noting "Missing token".
 
@@ -307,7 +310,7 @@ curl -i -X POST http://127.0.0.1:8000/mcp \
      -d '{"jsonrpc":"2.0","id":"bad","method":"list_tools","params":[]}'
 ```
 
-![500 error and switching terminals](./images/aia-2-37.png?raw=true "500 error and switching terminals") 
+![500 error and switching terminals](./images/ae70.png?raw=true "500 error and switching terminals") 
 <br><br>
 
 
@@ -317,7 +320,7 @@ curl -i -X POST http://127.0.0.1:8000/mcp \
 python secure_client.py
 ```
 
-![Running the secure client](./images/mcp59.png?raw=true "Running the secure client") 
+![Running the secure client](./images/ae71.png?raw=true "Running the secure client") 
 <br><br>
 
 
@@ -329,7 +332,7 @@ curl -s -X POST http://127.0.0.1:9000/introspect \
      -d "{\"token\":\"$TOKEN\"}" | jq
 ```
 
-![Introspecting token](./images/mcp62.png?raw=true "Introspecting token") 
+![Introspecting token](./images/ae72.png?raw=true "Introspecting token") 
 <br><br>
 
 
@@ -346,7 +349,7 @@ curl -i -X POST http://127.0.0.1:8000/mcp \
 Then look back at the body of the response from running that, you should see an error message.
 </br></br>
 
-![Invalid token](./images/aia-2-30.png?raw=true "Invalid token") 
+![Invalid token](./images/ae73.png?raw=true "Invalid token") 
 
 </br></br>
 
