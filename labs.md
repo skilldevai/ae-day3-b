@@ -80,12 +80,12 @@ npx -y @wrtnlabs/calculator-mcp@latest --port 8931
 python ../tools/discover_tools.py  8931 sse
 ```
 
-![Discovering tools](./images/aia-2-38.png?raw=true "Discovering tools")
+![Discovering tools](./images/ae58.png?raw=true "Discovering tools")
 
 <br><br>
 
 
-8. Next, let's see how we can create a minimal client to use the MCP server. Create a new file called *mpc_client.py*. We'll add code for this in the next step.
+8. Next, let's see how we can create a minimal client to use the MCP server. Create a new file called *mcp_client.py*. We'll add code for this in the next step.
 
 ```
 code mcp_client.py
@@ -121,16 +121,16 @@ if __name__ == "__main__":
 python mcp_client.py
 ```
 
-![Running client](./images/mcp7-new.png?raw=true "Running client")
+![Running client](./images/ae59.png?raw=true "Running client")
 </br></br>
 
-11. Finally, let's create a simple agent implementation that uses tools from this server in conjunction with a local LLM to respond to a prompt. To save time, we already have the code for the agent in the file *agent_mcp.py*. You can browse the code to see what it is doing.To make it easier to see the **differences from the simple client**, run the command below and you can scroll down through the differences. *Do not make any changes in the files here.* When done, just click the "X" in the tab at the top to close this view.
+11. Finally, let's build out a simple agent implementation that uses tools from this server in conjunction with a local LLM to respond to a prompt. We'll assemble the agent code again using the *diff and merge* approach. Run the command below and you can scroll down through the differences and merge them in to complete the code. When done, just click the "X" in the tab at the top to close this view.
 
 ```
-code -d mcp_client.py agent_mcp.py
+code -d ../extra/agent_mcp.txt agent_mcp.py
 ```
 
-![Diff view](./images/mcp80.png?raw=true "Diff view")
+![Diff view](./images/ae60.png?raw=true "Diff view")
 </br></br>
 
 12. Now, you can run the agent to see it in action. When this runs, it will show you the LLM's output and also the various tool calls and results. Note that it will take a while for the LLM to process things since it is running against a local model in our codespace. Also, since we are not using a very powerful or tuned model here, it is possible that you will see a mistake in the final output. If so, try running the agent code again. (Notice that we are using a different problem this time: 12x8/3)
@@ -139,7 +139,7 @@ code -d mcp_client.py agent_mcp.py
 python agent_mcp.py
 ```
 
-![Running agent](./images/mcp81.png?raw=true "Running agent")
+![Running agent](./images/ae61.png?raw=true "Running agent")
 </br></br>
 
 You can stop the MCP server in the original terminal via CTRL-C.
