@@ -1,7 +1,7 @@
-# Enterprise AI Accelerator Workshop
-## Day 2 - Part 2 - MCP
+# Applied AI Engineering for the Enterprise
+## Day 3 - MCP
 ## Session labs 
-## Revision 1.5 - 11/29/25
+## Revision 1.5 - 01/21/26
 
 **Versions of dialogs, buttons, etc. shown in screenshots may differ from current version used in dev environments**
 
