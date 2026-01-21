@@ -130,8 +130,6 @@ async def main():
         # We execute them one-by-one, in order, and only move to the next after
         # we have a result for the previous one.
         #
-        # This avoids the earlier "placeholder" problem like:
-        #   div(a="[result of previous call]", b=3)
 
         for call in ai.tool_calls:
             tool_name = call["name"]
