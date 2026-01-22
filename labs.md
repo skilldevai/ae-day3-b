@@ -498,7 +498,7 @@ python tools/discover_tools.py 8000 mcp
    - Support queries are classified and answered using the OmniTech knowledge base
    - Direct RAG search handles exploratory questions
 
-   This represents best practices for production customer support systems with clear separation of concerns.
+   This represents best practices for production customer support systems with clear separation of concerns. From the ```/workspaces/ae-day3-b``` directory, run the following command:
 
 ```
 code -d extra/rag_agent_classification_solution.txt rag_agent_classification.py
@@ -521,8 +521,8 @@ As you review and merge the differences, observe the key architectural patterns:
 <br><br>
 
 2.  Merge each section carefully. Notice two key functions:
-   - `handle_canonical_query_with_classification()`: Orchestrates the 4-step support workflow for classified queries
-   - `handle_rag_search()`: Performs direct semantic search for exploratory questions
+   - `handle_canonical_query_with_classification()`: Orchestrates the 4-step support workflow for classified queries (around line 132)
+   - `handle_rag_search()`: Performs direct semantic search for exploratory questions (around line 242)
 
    The agent has no local file reading, no embeddings, no vector database - everything comes from MCP.
 
@@ -538,15 +538,17 @@ Reminder: This can take a while to start...
 
 <br><br>
 
-4. Now start the classification agent in a second terminal:
-
+4. Now start the classification agent in a second terminal with the command below. The agent will start and show some information about its architecture and sources.
+   
 ```
 python rag_agent_classification.py
 ```
 
+![Running the RAG agent](.ae77.png?raw=true "Running the RAG agent") 
+
 <br><br>
 
-5. The agent will start and explain that it uses the OmniTech knowledge base for customer support. You can try out some of the queries shown below. Note that some may take multiple minutes to process and respond.
+5. You can try out some of the queries shown below. Note that some may take multiple minutes to process and respond.
 
 **Account Security Questions:**
 ```
