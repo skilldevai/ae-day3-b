@@ -373,7 +373,7 @@ Then look back at the body of the response from running that, you should see an 
    First, change back to the root directory of the project if not there.
 
 ```
-cd /workspaces/aia-day2-b
+cd /workspaces/ae-day3-b
 ```
 
 <br><br>
@@ -419,7 +419,7 @@ As you review the differences, note the key components:
 python mcp_server_classification.py
 ```
 
-![Running the MCP server](./images/aia-2-33.png?raw=true "Running the MCP server") 
+![Running the MCP server](./images/ae74.png?raw=true "Running the MCP server") 
 
 <br><br>
 
@@ -443,7 +443,7 @@ python mcp_server_classification.py
    - **Statistics** : Knowledge base statistics
   
 
-![Running the MCP server](./images/aia-2-32.png?raw=true "Running the MCP server") 
+![Running the MCP server](./images/ae75.png?raw=true "Running the MCP server") 
 
 <br><br>
 
@@ -468,7 +468,7 @@ python tools/discover_tools.py 8000 mcp
    - **Validation tools**: `validate_support_query`
    - **Statistics tools**: `get_knowledge_base_stats`
 
-![Discover tools](./images/aia-2-39.png?raw=true "Discover tools") 
+![Discover tools](./images/ae76.png?raw=true "Discover tools") 
 
 <br><br>
 
@@ -477,7 +477,7 @@ python tools/discover_tools.py 8000 mcp
 9. (**OPTIONAL**) If you have extra time and want to explore the server more, you can start up our MCP Explorer tool and play with running some of the tools in the server. If you run the command below (from the root of the project), and it tries to open up another codespace instance, just close that and then run the command again.
 
 ```
- $ python ./scripts/mcp_explorer.py http://localhost:8000/mcp 5000
+ $ python ./scripts/mcp_explorer.py http://localhost:8000/mcp 8080
 ```
 
 ![Discover tools](./images/aia-2-46.png?raw=true "Discover tools") 
