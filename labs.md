@@ -232,7 +232,130 @@ python scripts/mcp_explorer.py http://localhost:8000/mcp 8080
 </p>
 </br></br></br>
 
+**Lab 3: ITSM MCP Server**
 
+**Purpose:** In this lab, we'll build a simple, realistic MCP server for an IT Service Desk that demonstrates the enterprise pattern:
+- A tool that returns **structured JSON** (not just prose)
+- Tools that return **resource URIs** clients can fetch via `read_resource()`
+
+## What you’ll build
+
+### Server capabilities
+- **Tool:** `incident_pack`
+  - Returns a machine-usable incident bundle (category, severity, next steps)
+  - Includes **resource URIs** for policy + KB articles
+- **Tool:** `create_research_plan`
+  - Creates an incident research plan artifact
+  - Returns a **resource URI**: `itsm://cases/<id>/research-plan`
+- **Resources:**
+  - `itsm://policies/incident-severity`
+  - `itsm://kb/{article_id}`
+  - `itsm://cases/{case_id}/research-plan`
+- **Prompt:**
+  - `ask_clarifying_questions`
+- **Audit log:**
+  - `itsm_audit.jsonl` (JSONL file written by the server)
+
+### Transport
+- **Streamable HTTP** (`transport="http"`)
+- Health endpoint: `http://localhost:8000/health`
+- MCP endpoint: `http://localhost:8000/mcp`
+
+---
+
+1. First, let's build out the MCP server. As before, we'll use the merge/diff approach.
+
+
+ Create `itsm_mcp_server.py`
+Create a file named `itsm_mcp_server.py` in this folder using the **Simplified ITSM MCP Server** version from your instructor materials (or the version provided earlier in this chat).
+
+**Quick verification checklist (server file should include):**
+- `mcp = FastMCP(...)`
+- A `/health` route that returns `OK`
+- Tool `incident_pack(...)` returning a JSON object that includes:
+  - `incident.category`
+  - `incident.severity`
+  - `next_steps` (3–4 items)
+  - `resources.policy_uris` and `resources.kb_uris`
+- Tool `create_research_plan(...)` returning:
+  - `case_id`
+  - `resource_uri` like `itsm://cases/CASE-.../research-plan`
+- Resources:
+  - `itsm://policies/incident-severity`
+  - `itsm://kb/{article_id}`
+  - `itsm://cases/{case_id}/research-plan`
+- Prompt `ask_clarifying_questions(category, severity)`
+- `mcp.run(transport="http", host="127.0.0.1", port=8000)`
+
+### 5) Run the MCP server
+```bash
+python itsm_mcp_server.py
+```
+
+Leave the server running in this terminal.
+
+### 6) Verify the health endpoint
+In a browser, open:
+- `http://localhost:8000/health`
+
+Expected response:
+- `OK`
+
+### 7) Create `itsm_client_smoke.py`
+Create a file named `itsm_client_smoke.py` using the **Simplified Client Smoke Test** version from your instructor materials (or the version provided earlier in this chat).
+
+**Quick verification checklist (client file should include):**
+- Connect to `SERVER_URL = "http://localhost:8000/mcp"`
+- `list_tools()` and print tool names
+- Call `incident_pack` and parse the result as JSON
+- Loop over returned URIs and call `read_resource(uri)`
+- Call `create_research_plan`, parse JSON, and then `read_resource(resource_uri)`
+- Call `get_prompt("ask_clarifying_questions", ...)` and print messages
+
+### 8) Run the client smoke test
+In a second terminal (same venv activated):
+```bash
+python itsm_client_smoke.py
+```
+
+### 9) Confirm the “structured output + resource URIs” pattern
+In the client output, confirm that:
+- `incident_pack` returns structured JSON (category, severity, next steps)
+- `incident_pack.resources` includes URIs like:
+  - `itsm://policies/incident-severity`
+  - `itsm://kb/kb-2001`
+- The client fetches these with `read_resource(...)`
+
+### 10) Confirm “artifact-as-resource” works
+Confirm that:
+- `create_research_plan` returns a `resource_uri`
+- The client fetches it with `read_resource(resource_uri)` and prints a readable plan
+
+### 11) Inspect the audit log
+In the server folder:
+```bash
+ls -l itsm_audit.jsonl
+tail -n 5 itsm_audit.jsonl
+```
+
+You should see entries for:
+- `incident_pack`
+- `create_research_plan`
+
+### 12) Optional: tweak KB suggestions
+In the server’s KB catalog (e.g., `_kb_catalog()`):
+- Add a new article such as `kb-2100: Certificate Rotation for SSO`
+- Restart the server and rerun the client
+- Confirm `incident_pack.resources.kb_uris` changes to include the new article when relevant
+
+---
+
+## Expected outcomes
+
+By the end of the lab, you should be able to explain and demonstrate:
+- Why `incident_pack` is useful: it returns machine-usable JSON plus URIs to fetch controlled content
+- Why “resource URIs” are useful: clients choose what to load into context (control + efficiency)
+- Why “artifact-as-resource” is useful: reusable, auditable outputs without bloating tool responses
 
 
 **Lab 4 - Building a Customer Support Classification MCP Server**
