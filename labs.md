@@ -1,7 +1,7 @@
 # Applied AI Engineering for the Enterprise
 ## Day 3 - MCP
 ## Session labs 
-## Revision 1.5 - 01/21/26
+## Revision 2.0 - 01/30/26
 
 **Versions of dialogs, buttons, etc. shown in screenshots may differ from current version used in dev environments**
 
@@ -233,132 +233,7 @@ python scripts/mcp_explorer.py http://localhost:8000/mcp 8080
 </br></br></br>
 
 
-**Lab 3 - Security and Authorization in MCP**
 
-**Purpose: This lab shows how to add an external authorization server and verify how authorized and unauthorized MCP requests are handled.**
-
-1. Change into the *lab3* directory in the terminal.
-   
-```
-cd ../lab3
-```
-<br><br>
-
-
-2. In this directory, we have an example authorization server, a secure MCP server, and a secure MCP client. "Secure" here simply means they use a bearer token running on localhost, so they are not production-ready, but will serve us for this lab. It's designed as a "travel assistant" example.
-
-   To look at the code for the files, you can open any of them by clicking on them in the explorer view to the left in the codespace or click on the table item, or using the  "code <filename>" command in the terminal. The numbered comments in each file highlight the key parts. Also, the table below suggests some things to notice about each.
-
-</br></br>   
-
-| **File**               | **What to notice**                                                             |
-|------------------------|--------------------------------------------------------------------------------|
-| **[`auth_server.py`](lab3/auth_server.py)**   | `/token` issues a short-lived JWT; `/introspect` lets you verify its validity. |
-| **[`secure_server.py`](lab3/secure_server.py)** | Middleware rejects any request that’s missing a token or fails JWT verification.|
-| **[`secure_client.py`](lab3/secure_client.py)** | Fetches a token first, then calls the `add` tool with that bearer token.        |
-
-</br></br>
-
-3. Start the **authorization** server with the command below and leave it running in that terminal.
-
-```
-python auth_server.py
-```
-
-![Running authentication server](./images/ae67.png?raw=true "Running authentication server") 
-<br><br>
-
-4. Switch to the other terminal or open a new one. (Over to the far right above the terminals is a "+" to create a new terminal.) Then, let's verify that our authorization server is working with the curl command below and save the token it generates for later use. Run the commands below in the split/new terminal. Afterwards you can echo $TOKEN if you want to see the actual value. (**Make sure to run the last two commands so your token env variable will be accessible in new terminals.**)
-
-```
-export TOKEN=$(
-  curl -s -X POST \
-       -d "username=demo-client&password=demopass" \
-       http://127.0.0.1:9000/token \
-  | jq -r '.access_token'        
-)
-
-echo "export TOKEN=$TOKEN" >> ~/.bashrc   
-source ~/.bashrc 
-```
-</br></br>
-![curl and add new terminal](./images/ae68.png?raw=true "curl and add new terminal") 
-
-(Optional) If you want to look deeper at the token, you can echo the token string and paste it in at https://jwt.io 
-<br><br>
-
-
-5. Now, in that second terminal, make sure you are in the *lab3* directory, and start the secure **mcp** server.
-
-```
-cd ../lab3 (if needed)
-python secure_server.py
-```
-<br><br>
-
-![start secure mcp server](./images/ae69.png?raw=true "start secure mcp server") 
-
-<br><br>
-
-6. Open another new terminal (you can use the "+" again) and run the curl below to demonstrate that requests with no tokens fail. When you run this you will see a "401 Unauthorized" response with a detailed error message noting "Missing token".
-
-```
-cd lab3 
-
-curl -i -X POST http://127.0.0.1:8000/mcp \
-     -H "Content-Type: application/json" \
-     -d '{"jsonrpc":"2.0","id":"bad","method":"list_tools","params":[]}'
-```
-
-![500 error and switching terminals](./images/ae70.png?raw=true "500 error and switching terminals") 
-<br><br>
-
-
-7. In the terminal where you ran that last curl, you can run the secure client. You should see output showing that it ran the "add" tool and the results. Behind the scenes it will have A) POSTed to /token B) Connected to /mcp  with Authorization: Bearer ...  C) Called the secure tool.
-
-```
-python secure_client.py
-```
-
-![Running the secure client](./images/ae71.png?raw=true "Running the secure client") 
-<br><br>
-
-
-8. If you want, you can introspect the token we created with the curl command below.
-
-```
-curl -s -X POST http://127.0.0.1:9000/introspect \
-     -H "Content-Type: application/json" \
-     -d "{\"token\":\"$TOKEN\"}" | jq
-```
-
-![Introspecting token](./images/ae72.png?raw=true "Introspecting token") 
-<br><br>
-
-
-9. Finally, you can show that breaking the token breaks the authentication. Run the curl command below. 
-
-```
-BROKEN_TOKEN="${TOKEN}corruption"
-curl -i -X POST http://127.0.0.1:8000/mcp \
-     -H "Authorization: Bearer $BROKEN_TOKEN" \
-     -H "Content-Type: application/json" \
-     -d '{"jsonrpc":"2.0","id":2,"method":"add","params":{"a":1,"b":1}}'
-```
-</br></br>
-Then look back at the body of the response from running that, you should see an error message.
-</br></br>
-
-![Invalid token](./images/ae73.png?raw=true "Invalid token") 
-
-</br></br>
-
-10. When you're done, you can stop (CTRL+C) the running authorization server and the secure mcp server.
-   
-<p align="center">
-<b>[END OF LAB]</b>
-</p>
-</br></br></br>
 
 **Lab 4 - Building a Customer Support Classification MCP Server**
 
