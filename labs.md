@@ -1,7 +1,7 @@
 # Applied AI Engineering for the Enterprise
 ## Day 3 - MCP
 ## Session labs 
-## Revision 2.0 - 01/30/26
+## Revision 2.1 - 01/31/26
 
 **Versions of dialogs, buttons, etc. shown in screenshots may differ from current version used in dev environments**
 
@@ -265,44 +265,42 @@ python scripts/mcp_explorer.py http://localhost:8000/mcp 8080
 
 1. First, let's build out the MCP server. As before, we'll use the merge/diff approach.
 
+```
+code -d extra/itsm_mcp_server.txt itsm_mcp_server.py
+```
+We're merging in code around the various *Server capabilities* described above under *What you'll build*.
 
- Create `itsm_mcp_server.py`
-Create a file named `itsm_mcp_server.py` in this folder using the **Simplified ITSM MCP Server** version from your instructor materials (or the version provided earlier in this chat).
 
-**Quick verification checklist (server file should include):**
-- `mcp = FastMCP(...)`
-- A `/health` route that returns `OK`
-- Tool `incident_pack(...)` returning a JSON object that includes:
-  - `incident.category`
-  - `incident.severity`
-  - `next_steps` (3–4 items)
-  - `resources.policy_uris` and `resources.kb_uris`
-- Tool `create_research_plan(...)` returning:
-  - `case_id`
-  - `resource_uri` like `itsm://cases/CASE-.../research-plan`
-- Resources:
-  - `itsm://policies/incident-severity`
-  - `itsm://kb/{article_id}`
-  - `itsm://cases/{case_id}/research-plan`
-- Prompt `ask_clarifying_questions(category, severity)`
-- `mcp.run(transport="http", host="127.0.0.1", port=8000)`
+![Assembling mcp server code](./images/ae146.png?raw=true "Assembling mcp server code")
 
-### 5) Run the MCP server
+<br><br>
+
+2. Now run the MCP server.
+
 ```bash
 python itsm_mcp_server.py
 ```
 
 Leave the server running in this terminal.
 
-### 6) Verify the health endpoint
-In a browser, open:
-- `http://localhost:8000/health`
+![Running mcp server code](./images/ae147.png?raw=true "Running mcp server code")
+
+<br><br>
+
+3. Verify the health endpoint. After the server starts, you'll see a dialog to open the application on the web. You can click on that to open it. Or, you can go to the *PORTS* tab, find the row for *MCP Server (8000) and click on the *Forwarded Address* or hover over the row and click on the *globe* icon in a browser.  **After you open up that page, you will need to add `/health` to the url and then you should see *OK* on the page.
+   
+![Checking health endpoint](./images/ae148.png?raw=true "Checking health endpoint")
 
 Expected response:
 - `OK`
 
-### 7) Create `itsm_client_smoke.py`
-Create a file named `itsm_client_smoke.py` using the **Simplified Client Smoke Test** version from your instructor materials (or the version provided earlier in this chat).
+4. Next, build out a simple smoke test to demo some of the functionality with the merge/diff approach. Switch to a new terminal first.
+
+```
+code -d extra/itsm_client_smoke.txt itsm_client_smoke.py
+```
+
+We're merging in code to test some of the core functionality from the server.
 
 **Quick verification checklist (client file should include):**
 - Connect to `SERVER_URL = "http://localhost:8000/mcp"`
@@ -312,13 +310,20 @@ Create a file named `itsm_client_smoke.py` using the **Simplified Client Smoke T
 - Call `create_research_plan`, parse JSON, and then `read_resource(resource_uri)`
 - Call `get_prompt("ask_clarifying_questions", ...)` and print messages
 
-### 8) Run the client smoke test
-In a second terminal (same venv activated):
+![Assembling smoke test code](./images/ae149.png?raw=true "Assembling smoke test code")
+
+<br><br>
+
+5. Run the client smoke test.
+
 ```bash
 python itsm_client_smoke.py
 ```
 
-### 9) Confirm the “structured output + resource URIs” pattern
+<br><br>
+
+6. Confirm the “structured output + resource URIs” pattern
+   
 In the client output, confirm that:
 - `incident_pack` returns structured JSON (category, severity, next steps)
 - `incident_pack.resources` includes URIs like:
@@ -326,12 +331,21 @@ In the client output, confirm that:
   - `itsm://kb/kb-2001`
 - The client fetches these with `read_resource(...)`
 
-### 10) Confirm “artifact-as-resource” works
+![structured output](./images/ae152.png?raw=true "structured output")
+
+<br><br>
+
+7. Confirm “artifact-as-resource” works
 Confirm that:
 - `create_research_plan` returns a `resource_uri`
 - The client fetches it with `read_resource(resource_uri)` and prints a readable plan
 
-### 11) Inspect the audit log
+![research plan](./images/ae154.png?raw=true "research plan")
+
+<br><br>
+
+8. Inspect the audit log
+
 In the server folder:
 ```bash
 ls -l itsm_audit.jsonl
@@ -342,7 +356,10 @@ You should see entries for:
 - `incident_pack`
 - `create_research_plan`
 
-### 12) Optional: tweak KB suggestions
+![audit log](./images/ae155.png?raw=true "audit log")
+
+9. Optional: tweak KB suggestions
+
 In the server’s KB catalog (e.g., `_kb_catalog()`):
 - Add a new article such as `kb-2100: Certificate Rotation for SSO`
 - Restart the server and rerun the client
@@ -356,6 +373,13 @@ By the end of the lab, you should be able to explain and demonstrate:
 - Why `incident_pack` is useful: it returns machine-usable JSON plus URIs to fetch controlled content
 - Why “resource URIs” are useful: clients choose what to load into context (control + efficiency)
 - Why “artifact-as-resource” is useful: reusable, auditable outputs without bloating tool responses
+
+<br><br>
+
+<p align="center">
+<b>[END OF LAB]</b>
+</p>
+</br></br></br>
 
 
 **Lab 4 - Building a Customer Support Classification MCP Server**
