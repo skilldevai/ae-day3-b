@@ -368,7 +368,7 @@ def ask_clarifying_questions(category: str, severity: str) -> List[Message]:
     system = Message(
         "You are an IT Service Desk assistant. Ask only the minimum clarifying questions needed "
         "to triage and resolve. Keep questions short and numbered.",
-        role="system",
+        role="assistant",
     )
     user = Message(
         f"""Generate clarifying questions for:
