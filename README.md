@@ -44,7 +44,7 @@ When you see this, just hit *Enter* to get to a prompt.
 **4. Open up the *labs.md* file so you can follow along with the labs.**
 You can either open it in a separate browser instance or open it in the codespace. 
 
-![Opening labs](./images/ae32.png?raw=true "Opening labs")
+![Opening labs](./images/ae164.png?raw=true "Opening labs")
 
 <br><br>
 
