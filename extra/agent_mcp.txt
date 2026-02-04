@@ -1,4 +1,5 @@
 import asyncio
+import os
 import re
 
 from langchain_ollama import ChatOllama
@@ -75,7 +76,8 @@ async def main():
     # ChatOllama is your local LLM runner.
     # .bind_tools(tools) tells the model which tool "schemas" it is allowed to call.
 
-    llm = ChatOllama(model="llama3.2").bind_tools(tools)
+    model_name = os.getenv("OLLAMA_MODEL", "llama3.2")
+    llm = ChatOllama(model=model_name).bind_tools(tools)
 
     # This is the "system message" that sets the rules of behavior.
     # We emphasize: use tools for math, no nesting, and sequential steps.
@@ -192,3 +194,4 @@ async def main():
 if __name__ == "__main__":
     # Standard pattern for running async Python code.
     asyncio.run(main())
+
