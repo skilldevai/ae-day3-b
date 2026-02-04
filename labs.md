@@ -1,7 +1,7 @@
 # Applied AI Engineering for the Enterprise
 ## Day 3 - MCP
 ## Session labs 
-## Revision 2.1 - 01/31/26
+## Revision 2.2 - 02/04/26
 
 **Versions of dialogs, buttons, etc. shown in screenshots may differ from current version used in dev environments**
 
@@ -263,7 +263,7 @@ python scripts/mcp_explorer.py http://localhost:8000/mcp 8080
 
 ---
 
-1. First, let's build out the MCP server. As before, we'll use the merge/diff approach.
+1. First, let's build out the MCP server. Go to the root of the project. As before, we'll use the merge/diff approach.
 
 ```
 code -d extra/itsm_mcp_server.txt itsm_mcp_server.py
@@ -556,8 +556,6 @@ As you review and merge the differences, observe the key architectural patterns:
 (if needed) python mcp_server_classification.py
 ```
 
-Reminder: This can take a while to start...
-
 <br><br>
 
 4. Now start the classification agent in a second terminal with the command below. The agent will start and show some information about its architecture and sources.
@@ -566,7 +564,7 @@ Reminder: This can take a while to start...
 python rag_agent_classification.py
 ```
 
-![Running the RAG agent](.ae77.png?raw=true "Running the RAG agent") 
+![Running the RAG agent](./images/aia-2-41.png?raw=true "Running the RAG agent")
 
 <br><br>
 
@@ -599,8 +597,6 @@ What is your return policy?
 How long do I have to return a product?
 Is my device still under warranty?
 ```
-
-![Running the RAG agent](./images/aia-2-41.png?raw=true "Running the RAG agent") 
 
 <br><br>
 
