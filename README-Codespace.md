@@ -32,7 +32,7 @@ The codespace is ready to use when you see output like the one shown below in it
 
 You can open the [labs.md](./labs.md) file either in your codespace or in a separate browswer tab/instance.**
 
-![Labs](./images/aia-2-35.png?raw=true "Labs")
+![Labs](./images/ae164.png?raw=true "Labs")
 
 <br>
 
