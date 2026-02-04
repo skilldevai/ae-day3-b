@@ -37,6 +37,8 @@ done
 
 sleep 15
 ollama pull llama3.2
+ollama pull llama3.2:3b
+ollama pull llama3.2:1b
 ollama list
 
 
